@@ -36,3 +36,9 @@ Will only play correctly on one of the two expected output channels.  This is ad
 #pan "0.0625"
 #cut "1"
 ```
+
+### Jack & Jackmixer
+
+After compiling Dirt for 8 channels of output, you will see the appropriate number of exposed outs.  I recommend using a graphical mixing tool in order to work through output expectations such as those mentioned in the above section.  For this I opted to use jackmixer which provides a basic interface with channel levels.
+
+I chose to setup d1-d8 for dirt output and e1-e8 (external) for handling 8 channel output of synthesizers.  The XML configuration for jackmixer is included in this repo for reference.  An extra bonus of using jackmixer is the ability to midi map channel pan/levels.  These values were defined for manually mixing synth inputs to target speakers during live performance.
