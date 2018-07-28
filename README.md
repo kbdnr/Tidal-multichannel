@@ -37,6 +37,10 @@ Will only play correctly on one of the two expected output channels.  This is ad
 #cut "1"
 ```
 
+For reference, here was the arrangement of the 8 speakers labeled by their output channel from an interface.
+
+![alt text](https://raw.githubusercontent.com/kbdnr/Tidal-multichannel/master/speakerarrangement.png "Speaker Arrangement")
+
 ### Jack & Jackmixer
 
 After compiling Dirt for 8 channels of output, you will see the appropriate number of exposed outs.  I recommend using a graphical mixing tool in order to work through output expectations such as those mentioned in the above section.  For this I opted to use jackmixer which provides a basic interface with channel levels.
