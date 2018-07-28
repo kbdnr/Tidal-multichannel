@@ -2,7 +2,7 @@
 
 Here is a quick overview of setting up an 8-channel tidalcycles environment using Dirt.
 
-[[https://github.com/kbdnr/Tidal-multichannel/Screenshot%20from%202018-07-28%2011-02-09.png|alt=jackandjackmixer]]
+![alt text](https://raw.githubusercontent.com/kbdnr/Tidal-multichannel/master/Screenshot%20from%202018-07-28%2011-02-09.png "Jack Screenshot")
 
 ### Dirt
 https://github.com/tidalcycles/Dirt
