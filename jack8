@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<jack_mixer geometry="818x340">
+	<input_channel balance="0.000000" balance_midi_cc="51" name="d1" type="mono" volume="0.000000" volume_midi_cc="43"/>
+	<input_channel balance="0.000000" balance_midi_cc="52" name="d2" type="mono" volume="-0.000000" volume_midi_cc="44"/>
+	<input_channel balance="0.000000" balance_midi_cc="53" name="d3" type="mono" volume="0.000000" volume_midi_cc="45"/>
+	<input_channel balance="0.000000" balance_midi_cc="54" name="d4" type="mono" volume="0.000000" volume_midi_cc="46"/>
+	<input_channel balance="0.000000" balance_midi_cc="55" name="d5" type="mono" volume="0.000000" volume_midi_cc="47"/>
+	<input_channel balance="0.000000" balance_midi_cc="56" name="d6" type="mono" volume="0.000000" volume_midi_cc="48"/>
+	<input_channel balance="0.000000" balance_midi_cc="57" name="d7" type="mono" volume="0.000000" volume_midi_cc="49"/>
+	<input_channel balance="0.000000" balance_midi_cc="58" name="d8" type="mono" volume="0.000000" volume_midi_cc="50"/>
+	<input_channel balance="0.000000" balance_midi_cc="59" name="e1" type="mono" volume="-25.275591" volume_midi_cc="21"/>
+	<input_channel balance="0.000000" balance_midi_cc="30" name="e2" type="mono" volume="-27.165354" volume_midi_cc="22"/>
+	<input_channel balance="0.000000" balance_midi_cc="32" name="e3" type="mono" volume="-22.913383" volume_midi_cc="23"/>
+	<input_channel balance="0.000000" balance_midi_cc="34" name="e4" type="mono" volume="-21.496063" volume_midi_cc="24"/>
+	<input_channel balance="0.000000" balance_midi_cc="36" name="e5" type="mono" volume="-20.551182" volume_midi_cc="25"/>
+	<input_channel balance="0.000000" balance_midi_cc="38" name="e6" type="mono" volume="-20.551182" volume_midi_cc="26"/>
+	<input_channel balance="0.000000" balance_midi_cc="40" name="e7" type="mono" volume="-22.913383" volume_midi_cc="27"/>
+	<input_channel balance="0.000000" balance_midi_cc="42" name="e8" type="mono" volume="0.000000" volume_midi_cc="28"/>
+	<main_mix_channel balance="0.000000" balance_midi_cc="8" volume="0.000000" volume_midi_cc="7"/>
+</jack_mixer>
