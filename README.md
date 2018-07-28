@@ -41,6 +41,22 @@ For reference, here was the arrangement of the 8 speakers labeled by their outpu
 
 ![alt text](https://raw.githubusercontent.com/kbdnr/Tidal-multichannel/master/speakerarrangement.png "Speaker Arrangement")
 
+```haskell
+--more pans
+let pair1 = pan "[0.0, 0.125]"
+    pair2 = pan "[0.25, 0.375]"
+    pair3 = pan "[0.5, 0.625]"
+    pair4 = pan "[0.75, 0.875]"
+    pair1c = pan "[0.075]"
+    pair2c = pan "[0.3125]"
+    pair3c = pan "[0.565]"
+    pair4c = pan "[0.8125]"
+    panL  = pan "[0, 0.25, 0.5, 0.75]"
+    panR  = pan "[0.125, 0.375, 0.625, 0.875]"
+    panCClockwise = pan "{0.125 0.375 0.625 0.875 0.75 0.5 0.25 0.0}%8"
+    panClockwise  = pan "{0.0 0.25 0.5 0.75 0.875 0.625 0.375 0.125}%8"
+```
+
 ### Jack & Jackmixer
 
 After compiling Dirt for 8 channels of output, you will see the appropriate number of exposed outs.  I recommend using a graphical mixing tool in order to work through output expectations such as those mentioned in the above section.  For this I opted to use jackmixer which provides a basic interface with channel levels.
