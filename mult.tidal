@@ -1,0 +1,658 @@
+bpm 60
+
+--pan scripts
+let l1 = pan "0.0"
+  l2 = pan "0.125"
+  l3 = pan "0.25"
+  l4 = pan "0.375"
+  l5 = pan "0.5"
+  l6 = pan "0.625"
+  l7 = pan "0.75"
+  l8 = pan "0.875"
+  --all
+  pAll = pan "[0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875]"
+  --pairings
+  pWide   = pan "[0.0, 0.875]"
+  pNarrow = pan "[0.375, 0.5]"
+  --series
+  pEven    = pan "[0.0,0.25,0.5,0.75]"
+  pOdd     = pan "[0.125,0.375,0.625,0.875]"
+  --tri pan
+  tri8 = (slow 8 $ pan (scale 0.0 0.9 tri))
+  tri7 = (slow 7 $ pan (scale 0.0 0.9 tri))
+  tri6 = (slow 6 $ pan (scale 0.0 0.9 tri))
+  tri5 = (slow 5 $ pan (scale 0.0 0.9 tri))
+  tri4 = (slow 4 $ pan (scale 0.0 0.9 tri))
+  tri3 = (slow 3 $ pan (scale 0.0 0.9 tri))
+  tri2 = (slow 2 $ pan (scale 0.0 0.9 tri))
+  triN = pan (scale 0.0 0.9 tri)
+
+--more pans
+let pair1 = pan "[0.0, 0.125]"
+    pair2 = pan "[0.25, 0.375]"
+    pair3 = pan "[0.5, 0.625]"
+    pair4 = pan "[0.75, 0.875]"
+    pair1c = pan "[0.075]"
+    pair2c = pan "[0.3125]"
+    pair3c = pan "[0.565]"
+    pair4c = pan "[0.8125]"
+    panL  = pan "[0, 0.25, 0.5, 0.75]"
+    panR  = pan "[0.125, 0.375, 0.625, 0.875]"
+    panCClockwise = pan "{0.125 0.375 0.625 0.875 0.75 0.5 0.25 0.0}%8"
+    panClockwise  = pan "{0.0 0.25 0.5 0.75 0.875 0.625 0.375 0.125}%8"
+
+bpm 165 
+
+d1 $ every 3 (# begin "0.5") $ 
+   slow 2 $ s "br165"
+     # cut "2"
+     # end "0.5"
+
+d1 $ slow 4 $ s "lovebb*8" # cut "1"
+   # n (run 8)
+   # begin rand
+
+m1 silence
+
+--sound for MF
+--feet & creaks
+d7 $ 
+   stack [
+   randcat [
+     sound (samples "[footsteps*3? ~]" (irand 3)),
+     sound (samples "footsteps*5?" (irand 10)),
+     sound (samples "footsteps*3?" (run 3))
+   ]
+   ]
+   # n (irand 10) 
+   |+| (slow 4 $ pan (scale 0.0 0.9 sinewave1))
+
+--musicbox
+d4 $ slow 2 $ every 4 (slow 4 . rev . juxBy 0.4 (iter 4)) $ 
+   superimpose ((# speed "{1 1.19 0.75 2 0.82 3}%7") . (rev . (|*| speed "[1,2]"))) $ 
+   stack [
+   s "[musicbox*2? [musicbox*3?],musicbox*4? [musicbox*4? musicbox*2?]]"
+   --s "[musicbox*8?]" # nudge 0.5
+   ]
+   # n (irand 30)
+   |+| (density 3 $ delay (scale 0.1 0.4 sawwave))
+   # gain "0.9" ---performant
+   # randcat [pair1, pair2, panClockwise, panCClockwise]
+
+--exp 14
+d1 $ slow 2 $ rarely (slow 2) $ rarely (density 2 . (|-| speed "0.18 0.3 0.2 0")) $ 
+   --every 4 (jux ((0.125 <~) . (|+| speed "0.24"))) $ 
+   --every 3 (density 2 . jux (|-| speed "0.19")) $ 
+   every 2 (jux ((iter 4) . (0.25 ~>) . rev)) $ 
+   slowcat [s "sc88*4", s "[sc88*4, sc88*3]"]
+   # speed "0.82 0.75 1 1.19"
+   # cut "2"
+   # gain "0.9"
+   # panClockwise
+
+d3 $ slow 3 $ every 2 (0.125 ~>) $ rarely (slow 2) $ rarely (density 2 . (|-| speed "0.1 0.2 0.25 0")) $ 
+   every 4 (jux ((0.125 <~) . (|+| speed "0.2"))) $ 
+   every 3 (density 2 . jux (|-| speed "0.3")) $ 
+   every 2 (jux ((iter 4) . (0.25 ~>) . rev)) $ 
+   slowcat [s "sc88*4", s "[sc88*4, sc88*3]"]
+   # speed "0.5 0.75 1 1.25"
+   # gain "0.8"
+   # cut "3"
+   # (density 3 $ panCClockwise)
+
+------
+
+d1 $ slow "<2 3 4 5>" $ s "thacsy"
+   # cut "<1 2 3 4 5>"
+   # pan "0.075"
+   # gain "0.7"
+
+d1 $ sometimes (# crush "<7 6 5>") $
+   slow "<2 3 4 5>" $ s "thacsy*4?"
+   # (density 4 $ randcat [pair1c,pair2c,pair3c,pair4c])
+   # cut "<1 2 3 4 5 6 7 8>"
+   # speed "{0.5 0.75 1 1.25}%4"
+   # gain "0.7"
+
+d1 $ every 2 (# crush "<7 6 5 4 3>") $
+   slow "<2 3 4 5>" $ s "thacsy*5"
+   # (randcat [l1,l2,l3,l4,l5,l6,l7,l8])
+   # cut "<1 2 3 4 5 6 7 8>"
+
+d1 $ every 2 (# crush "<7 6 5>") $
+   slow "<2 3 4 5>" $ s "thacsy*5"
+   # (randcat [l1,l2,l3,l4,l5,l6,l7,l8])
+   # cut "<1 2 3 4 5 6 7 8>"
+   # (slow 3 $ speed "{1 0.98 0.95 0.9 0.82 0.75}%8")
+
+---go here
+d1 $ every 2 (juxBy 0.3 (iter 4) . (density 2) . (#delay "0.2") . spike') $ 
+   every 2 (# crush "<7 6 5 4>") $
+   slow "<2 3 4 5>" $ s "[thacsy*5, ~ bells:1]"
+   # (randcat [l1,l2,l3,l4,l5,l6,l7,l8,pEven,pOdd,pair1c,pair2c,pair3c,pair4c])
+   # cut "<1 2 3 4 5 6 7 8>"
+   # (slow 3 $ speed "{1 0.95 0.9 0.8 0.7 0.5}%8")
+   # gain "0.9"
+
+d2 $ every 2 (jux (iter 4) . (density 2) . (#delay "0.2") . spike') $ 
+   every 2 (# crush "<7 6 5 4 3>") $
+   slow "<2 3 4 5>" $ s "[bells:0 bells:1]"
+   # (randcat [l1,l2,l3,l4,l5,l6,l7,l8])
+   # cut "<7 2 4 5 3 6 1 8>"
+   # (slow 3 $ speed "{1 0.95 0.9 0.8 0.7 0.5}%8")
+
+t2 (anticipateIn 4) $ every 2 (jux (iter 4) . (density 2) . (#delay "0.2") . spike') $ 
+   every 2 (# crush "<7 6 5 4 3>") $
+   slow "<2 3 4 5>" $ s "[bells:0*3 bells:1*4]"
+   # (randcat [l1,l2,l3,l4,l5,l6,l7,l8])
+   # cut "<7 2 4 5 3 6 1 8>"
+   # (slow 3 $ speed "{1 0.95 0.9 0.8 0.7 0.5}%8")
+   # (slow 10 $ gain (scale 1.0 0.8 tri))
+
+--combine these
+d4 $ sometimes (rev) $ s "[blip*8]"
+   |+| speed "{1 0.8 0.95 1.2 1.5}%8"
+   |+| (slow 8 $ crush (scale 3 12 sine))
+   |=| gain "0.9"
+   # (density 4 $ panCClockwise)
+
+--dr
+d3 $ slow 2 $ s "[xxlbd:4]"
+   # pair1
+   |=| gain "0.7"
+
+d3 $ s "[xxlbd:4, ~ perc:0 ~ [perc:5 perc:8]]"
+   # pair1
+   |=| gain "0.85"
+
+d3 $ sometimes (|+| crush "4") $ every 2 (stut 4 0.8 0.25) $ s "[xxlbd:4, ~ perc:0 ~ [perc:5 perc:8], xxlcp:3]"
+   # pair1
+   |=| gain "0.85"
+
+d3 $ sometimes (jux (0.25 ~>)) $ every 2 (stut 4 0.8 0.25) $ s "[xxlbd:4, ~ perc:0 ~ [perc:5 perc:8]]"
+   # pair1
+   |=| gain "0.85"
+
+d3 $ sometimes (jux (0.25 ~>)) $ every 2 (stut 4 0.8 0.25) $ s "[xxlbd:4, ~ perc:0 ~ [perc:5 perc:8], cp]"
+   # pair1
+   |=| gain "0.85"
+
+--exp 11
+d2 $ retrig $ slowcat [s "vl1*8", s "vl1*8" # n (run 8)] 
+   # panClockwise
+
+d4 $ every 8 (density 2 . rev) $ sometimes (jux ((iter 4) . (0.125 <~))) $ 
+   every 3 (# speed "1 0.9 0.8 0.7 0.6 0.5 0.4 0.3") $ 
+   slowcat [s "vl1*8", s "vl1*8" # n (run 8)]
+   # gain "0.8"
+   # (density 4 $ panCClockwise)
+
+d1 $ stack [
+   every 8 (density 2 . rev) $ sometimes (jux ((iter 4) . (0.125 <~))) $ 
+   every 3 (# speed "1 0.9 0.8 0.7 0.6 0.5 0.4 0.3") $ 
+   slowcat [s "vl1*8", s "vl1*8" # n (run 8)],
+   sometimes (# speed "0.5 0.25") $ every 2 (jux ((iter 5) . (0.33 ~>))) $ slowcat [s "vl1*8", s "vl1*8" # n (run 8)]
+   ]
+   # cut "2"
+   # (density 4 $ panCClockwise)
+
+d3 $ sometimes (slow 4) $ every 8 ((1 <<~) . (# speed rand)) $ stack [
+   every 8 (density 2 . rev) $ sometimes (jux ((iter 4) . (0.125 <~))) $ 
+   every 3 (# speed "1 0.9 0.8 0.7 0.6 0.5 0.4 0.3") $ 
+   slowcat [s "vl1*8", s "vl1*8" # n (run 8)],
+   sometimes (# speed "0.5 0.25") $ every 2 (jux ((iter 5) . (0.33 ~>))) $ slowcat [s "vl1*8", s "vl1*8" # n (run 8)] # cut "2",
+   sometimes (# speed "0.1 0.15") $ every 2 (jux ((iter 6) . (0.4 ~>))) $ slowcat [s "vl1*8?", s "vl1*8" # n (irand 8)] # cut "3"
+   ]
+   # (density 8 $ panCClockwise)
+
+d5 $ s "gamenwatch:2*4 gamenwatch:8*4"
+   # cut "4"
+   # (density 2 $ panCClockwise)
+
+--new tangent
+d3 $ every 2 (jux (iter 4) . (density 2) . (#delay "0.1") . spike') $ 
+   every 2 (# crush "<7 6 5>") $
+   slow "<2 3 4 5>" $ s "[flick*5?, xxlbd(3,8)?]"
+   # n (irand 10)
+   # (randcat [l1,l2,l3,l4,l5,l6,l7,l8])
+   # (slow 3 $ speed "{1 0.95 0.9 0.8 0.7 0.5}%8")
+
+t3 (anticipateIn 0.5) $ every 2 (jux (iter 3) . (density 2) . (#delay "0.1") . spike' . degradeBy 0.2) $ 
+   rarely (# pAll) $ 
+   every 2 (# crush "<7 6 5>") $
+   slow "<2 3 4 5>" $ 
+   stack [
+   s "[dmp*5?]" # gain "0.7" # begin rand # speed rand
+   # (randcat [pair1, pair2, pair3, pair4]),
+   s "xxlbd(3,8)?" # pair1
+   ]
+   # n (irand 10)
+   # cut "<7 2 4 5 3 6 1 8>"
+   # (slow 3 $ speed "{1 0.95 0.9 0.8 0.7 0.5}%8")
+
+
+--
+bpm 50
+--ehhh
+
+d5 $ sometimes (degradeBy 0.4 . density 2 . rev) $ 
+   density 4 $ s "asrx*3:4*12" 
+   # (jux (iter 4) $ speed "2 3 4 7")
+   # n (irand 20)
+   # begin (choose([0.25,0.5,0.75]))
+   # cut "3"
+   # (density 3 $ randcat [pWide,pNarrow,pEven,pOdd])
+
+t5 (anticipateIn 0.5) $ sometimes (degradeBy 0.4 . density 2 . rev) $ 
+   density 2 $ s "asrx*12?"
+   # (juxBy 0.6 (iter 4 . rev) $ speed "2 3 4 7")
+   # n (irand 17)
+   # begin (choose([0,0.5]))
+   # cut "<2 3>"
+   # (density 3 $ randcat [l1,l3,l4,l7,pair1c,pair2c,pair3c,pair4c])
+
+d6 $ sometimes (degradeBy 0.4 . density 2 . rev) $ 
+   density 4 $ s "asrx*3:4*12" 
+   # (jux (iter 4) $ speed "2 3 4 7")
+   # n (irand 20)
+   # begin (choose([0.25,0.5,0.75]))
+   # cut "2"
+   # (slow 2 $ slowcat [l1,l2,l3,l4,l5,l6,l7,l8])
+   # gain "1.2"
+
+bpm 40
+
+--minimal 1
+--
+d1 $ sometimes (#cut "1") $ s "99k*16?"
+   # (density "<1 2 3 4>" $ slowcat [pair1,pair2,pair3,pair4])
+   # n (irand 40)
+   # gain "0.9"
+
+d2 $ rarely (spike') $ 
+   every 3 (0.25 ~>) $ 
+   sometimes (degradeBy 0.4 . juxBy 0.4 (iter 4) . rev) $ 
+   stack [
+   s "bleep*16?" # gain "0.8",
+   s "beat2*16"
+   ]
+   # (density "<1 2 3 4 5 6 7 8>" $ panClockwise)
+   # n (irand 40)
+   # (slow 4 $ gain (scale 0.5 1.0 tri))
+   # (sometimes (density 4) $ speed "{0.5 0.6 0.7 0.8 0.9 1 1.1 1.2 1.3 1.4}%16")
+
+d3 $ slow 2 $ s "akaiamb:2"
+   # slowcat [pOdd,pEven]
+
+--bd stuff
+d1 $ slow 4 $ s "99k*8"
+   # n (irand 4)
+   # panClockwise
+
+d1 $ every 3 (# s "jconeshot") $ 
+   spaceOut [1, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3] $ s "99k*16"
+   # n (irand 4)
+   # randcat [panCClockwise,panClockwise]
+
+d1 $ every 3 ((# s "[deepsky]") . (#speed "4 3 2 1 0.5 0.25")) $ 
+   spaceOut [3,2.5, 2, 1.5,1,0.75,0.5, 0.4, 0.3] $ s "99k*16?"
+   # n (irand 8)
+   # (density "<4 3 2 1>" $ randcat [panCClockwise,panClockwise])
+
+d2 $ density 2 $ sometimes (juxBy 0.7 (iter 4 . rev . degradeBy 0.5 . spike')) $ 
+   spaceOut [3,2.5,2,1.5,1,0.75,0.5,0.4,0.3] $ 
+   s "[bleep*4?,d10la*8?]"
+   # n (irand 9)
+   # speed "[3 2 1 0.5]"
+   # (density "<4 3 2 1>" $ randcat [panCClockwise,panClockwise])
+   # gain "0.8"
+
+d3 $ spaceOut [3,2.5,2,1.5,1,0.75,0.5,0.4,0.3] $ s "digibd*4?"
+   # pair1
+
+--vocal mash
+d3 $ every 8 (spike') $ slow 5 $ 
+   spaceOut [3,2,1,0.5,0.4,0.3] $ stack [
+   s "vechno*26?" # n (run 26)
+      # (slow 4 $ crush (scale 10 2 tri)),
+   s "teachtalk*26?" # n (run 26) # nudge "0.5"
+      # (slow 4 $ crush (scale 10 2 tri)),
+   s "sprachen*26?" # n (run 26) # nudge "0.2"
+   ]
+   # speed rand
+   # (slow 3 $ delay (scale 0.1 0.5 tri))
+   # (slow 3 $ gain (scale 0.5 0.9 tri))
+   # (density 4 $ panCClockwise)
+
+bpm 60
+
+m1 silence
+
+--rp02
+bpm 20
+
+bpm 80
+
+bpm 10
+
+bpm 5
+
+d1 $ every 2 (stut 4 0.8 0.5) $ 
+   sometimes (#up "{-2 -4 -5 -6 -7 -8 -9}%128") $ 
+   s "[20020506h*64?, 20020506g*64?]" # n (irand 100)
+   --|+| cut "1"
+   |+| speed "{0.5 0.6 0.7 0.75 0.76 0.78 0.79 0.8 0.82 0.83 0.84 0.85 0.9 0.95 0.98 1.0 1.2 1.3 1.4 1.6}%64"
+   # (density 12 $ slowcat [pair1,pair2,pair3,pair4])
+
+d1 $ every 2 (stut 4 0.8 0.5) $ 
+   sometimes (#up "{-2 -4 -5 -6 -7 -8 -9}%128") $ 
+   s "[20020506h*64?, 20020506g*64?]" # n (irand 100)
+   |+| cut "1"
+   |+| speed "{0.5 0.6 0.7 0.75 0.76 0.78 0.79 0.8 0.82 0.83 0.84 0.85 0.9 0.95 0.98 1.0 1.2 1.3 1.4 1.6}%64"
+   # (density 12 $ slowcat [pair1c,pair2c,pair3c,pair4c])
+
+d1 $ rarely ((slow 2) . spike' . (# speed "1 2 3 4 5")) $ 
+   every 2 (stut 4 0.8 0.5) $ 
+   sometimes (#up "{-2 -4 -5 -6 -7 -8 -9}%128") $ 
+   s "[20020506h*64?, 20020506g*64?]" # n (irand 100)
+   |+| cut "1"
+   |+| speed "{0.5 0.6 0.7 0.75 0.76 0.78 0.79 0.8 0.82 0.83 0.84 0.85 0.9 0.95 0.98 1.0 1.2 1.3 1.4 1.6}%64"
+   # (density 20 $ randcat [pair1c,pair2c,pair3c,pair4c])
+
+d2 $ s "xxlcp:2*3?"
+   |+| cut "1"
+   # gain "0.9"
+   # (density 20 $ randcat [pair1c,pair2c,pair3c,pair4c])
+
+d3 $ sometimes (degradeBy 0.7) $ s "808rs*5?"
+   |+| speed "{2 0.5 1 0.8}%4"
+   # (density 20 $ randcat [pair1c,pair2c,pair3c,pair4c])
+
+--2
+t1 (anticipateIn 0.25) $ 
+   every 2 (stut 4 0.8 0.5) $ 
+   sometimes (#up "{-2 -4 -5 -6 -7 -8 -9}%128") $ 
+   s "[20020506h*32?, 20020506g*64?]" # n (irand 100)
+   |+| cut "1"
+   |+| speed "{0.5 0.6 0.7 0.75 0.76 0.78 0.79 0.8 0.82 0.83 0.84 0.85 0.9 0.95 0.98 1.0 1.2 1.3 1.4 1.6}%64"
+   # (density 12 $ slowcat [pair1,pair2,pair3,pair4])
+
+--mini
+t1 (anticipateIn 0.25) $ 
+   every 2 (stut 4 0.8 0.5) $ 
+   sometimes (#up "{-2 -4 -5 -6 -7 -8 -9}%128") $ 
+   s "[20020506h*128?, 20020506g*64?]" # n (irand 100)
+   |+| cut "1"
+   |+| speed "{0.5 0.7 0.8 0.87 0.89 0.98 1.01 1.1 1.22 1.33 1.44 1.55 1.6 1.75 1.88 1.9 2.1 2.3 2.4 2.6}%64"
+   # (density 12 $ slowcat [pair1,pair2,pair3,pair4])
+
+--full
+t1 (anticipateIn 0.25) $ 
+   every 2 (stut 4 0.8 0.5) $ 
+   sometimes (#up "{-2 -4 -5 -6 -7 -8 -9}%128") $ 
+   s "[20020506h*128?, 20020506g*64?]" # n (irand 100)
+   |+| speed "{0.5 0.7 0.8 0.87 0.89 0.98 1.01 1.1 1.22 1.33 1.44 1.55 1.6 1.75 1.88 1.9 2.1 2.3 2.4 2.6}%64"
+   # (density 12 $ slowcat [pair1,pair2,pair3,pair4])
+
+--clap up
+d2 $ s "xxlcp:6*16?"
+   |+| cut "1"
+   |+| speed "{0.5 0.7 0.8 0.87 0.89 0.98 1.01 1.1 1.22 1.33 1.44 1.55 1.6 1.75 1.88 1.9 2.1 2.3 2.4 2.6}%64"
+   # gain "0.9"
+   # (density 12 $ slowcat [pair1c,pair2c,pair3c,pair4c])
+
+--rim up
+d3 $ sometimes (degradeBy 0.7) $ s "808rs*64?"
+   |+| speed "{0.5 0.7 0.8 0.87 0.89 0.98 1.01 1.1 1.22 1.33 1.44 1.55 1.6 1.75 1.88 1.9 2.1 2.3 2.4 2.6}%64"
+   # slowcat [panCClockwise, panClockwise]
+
+d4 $ s "sine*16?" # speed "{0.2 0.22 0.24 0.3 0.15}%8"
+   # cut "2"
+   # pair1c
+   # gain "0.9"
+
+bpm 20
+
+bpm 40
+
+bpm 80
+
+d1 $ every 3 ((density 8) . (# delay "0.2")) $ sometimes (# up "3 5 6 7") $ s "[lfglitch:3, ~ chimes]"
+   # speed (rand)
+   # delay "0.0"
+   # delayfeedback "0.3"
+   # slowcat [panCClockwise, panClockwise]
+   --# cut "2"
+
+d2 $ slow 2 $ every 8 (stut 4 1.3 0.25) $ sometimes (2 <<~) $ every 5 (0.125 ~>) $ sometimes (density 2 . rev . degradeBy 0.6) $ 
+   every 3 (# speed "0.7") $ s "[xxlcp:9(3,8), ~ ~ xxlsn:6, ~ xxlhtc:7*5, xxlbd:3]"
+   # cut "3"
+   # (density 12 $ slowcat [pair1c,pair2c,pair3c,pair4c])
+
+d3 $ s "[lighter*13?]"
+   # n (irand 8)
+   # (density 4 $ slowcat [pair1c,pair2c,pair3c,pair4c])
+   # speed "{0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2}%13"
+
+d5 $ sometimes ((# speed "0.7") . (# delay "0.3")) $ slow 5 $ s "akaipads:17"
+   # gain "0.70"
+   # (slow 3 $ slowcat [pair1,pair2,pair3,pair4])
+
+d6 $ retrig $ slow 3 $ s "ywamen4*24"
+   # n (run 16)
+   # gain "1.2"
+   # cut "3"
+   # (density 16 $ slowcat [pair1c,pair2c,pair3c,pair4c])
+   # delay "0.1"
+   # delayfeedback "0.3"
+
+--sub front target
+d6 $ s "sine" # speed "0.2"
+   # cut "7"
+   # pan "[0.075]"
+
+bpm 80
+
+--t1
+
+d1 $ stack [
+   s "toney*8?"
+   # cut "2",
+   s "toney*8?" # nudge "0.25"
+   # cut "3"
+   ]
+   # (slow 5 $ gain (scale 0.4 0.8 sinewave1))
+   # randcat [pair1c,pair2c,pair3c,pair4c]
+
+
+d2 $ every 4 (jux (density 2 . (# speed "2 3 4 5"))) $ 
+   sometimes (#nudge "-0.25") $
+   every 2 (|*| speed "<0.5 2 0.75>") $
+   stack [
+   s "toney*8?"
+   # cut "4",
+   s "toney*8?" # nudge "0.25"
+   # cut "5"
+   ]
+   # (slow 3 $ gain (scale 0.4 0.8 tri))
+   # pair4c
+
+d3 $ 
+   every 3 (jux (density 2 . (# speed "0.2 0.3 0.4 0.5"))) $ 
+   sometimes (#nudge "-0.25") $
+   stack [
+   s "toney*4?" # nudge "0.33"
+   ]
+   # (slow 7 $ gain (scale 0.3 0.6 tri))
+   # pair3c
+
+--slow down but with bass
+d2 $ slow 3 $ s "jungbass" # cut "5"
+   # pair1c
+
+
+--transition to midi here
+--
+--
+--
+
+
+--back to bells
+--
+--
+--
+
+
+
+bpm 250
+
+bpm 200
+
+bpm 110
+
+d1 $ retrig $ slow 16 $ s "kungfu" # n (irand 20)
+   # cut "4"
+
+t1 (anticipateIn 2) $ every 3 (# pan rand) $
+   sometimes ((slow 5) . (#speed "0.5 0.4 0.6 0.7")) $ 
+   foldEvery [5,12] ((slow 4) . (spike) . rev . (#crush "3")) $ 
+   sometimes ((slow 4) . (# s "laz") . 
+           (#n (irand 20)) . 
+           (# speed "2 1.5 1 0.8") . 
+           (# begin rand) . 
+           (# cut "5")) $ 
+   spaceOut [0.7,0.8..1.2] $ 
+   sometimes (density 2 . degradeBy 0.4) $ 
+   sometimes (slow 2 . brak) $ 
+   stack [
+      s "[drumfx(3,8)]"
+      # cut "3"
+      # unit "c" # speed rand,
+      sometimes (0.25 ~>) $ chop 16 $ s "[digimrn*4]" # n (run 4)
+      # cut "6"
+      # unit "c" # speed rand,
+      sometimes (spike') $ s "[gabba*4]" # n (run 4)
+      # cut "4"
+   ]
+   # begin "<0.0 0.25>"
+   # nudge "-0.2"
+   # pan (scale 0.0 0.9 tri)
+
+bpm 200
+
+bpm 80
+
+t1 (anticipateIn 2) $ 
+   rarely (#begin rand) $ 
+   --rarely (jux (iter 4)) $ 
+   every 3 ((|*|speed "0.5 0.4 0.6 0.7")) $ 
+   foldEvery [5,12] ((slow 4) . (spike) . rev . (#crush "3")) $ 
+   sometimes ((slow 2) . (# s "laz") . 
+           (#n (irand 20)) . 
+           (# speed "2 1.5 1 0.8") . 
+           (# begin rand) . 
+           (# cut "5")) $ 
+   spaceOut [0.9,1..1.2] $ 
+   sometimes (density 2 . degradeBy 0.4) $ 
+   stack [
+      s "[drumbd2(3,8)]"
+      # cut "3"
+      # speed rand,
+      sometimes (0.25 ~>) $ chop 16 $ s "[industrial*4]" # n (run 4)
+      # cut "6"
+      # speed rand,
+      sometimes (spike') $ s "[gabba*4]" # n (run 4)
+      # cut "4"
+   ]
+   # nudge "-0.2"
+   # (density 2 $ pan (scale 0.0 0.9 sinewave))
+
+t1 (anticipateIn 2) $ 
+   rarely (#begin rand) $ 
+   --rarely (jux (iter 4)) $ 
+   every 3 ((|*|speed "0.5 0.4 0.6 0.7")) $ 
+   foldEvery [5,12] ((slow 4) . (spike) . rev . (#crush "3")) $ 
+   sometimes ((slow 2) . (# s "laz") . 
+           (#n (irand 20)) . 
+           (# speed "2 1.5 1 0.8") . 
+           (# begin rand) . 
+           (# cut "5")) $ 
+   spaceOut [0.9,1..1.2] $ 
+   sometimes (density 2 . degradeBy 0.4) $ 
+   stack [
+      s "[xxlbd(3,8)]"
+      # cut "3"
+      # speed rand,
+      s "[808rs*8?]"
+      # cut "8",
+      sometimes (0.25 ~>) $ chop 16 $ s "[industrial*4]" # n (run 4)
+      # cut "6"
+      # speed rand,
+      sometimes (spike') $ s "[gabbalouder*4]" # n (run 4)
+      # cut "4"
+   ]
+   # nudge "-0.2"
+   # (density 2 $ pan (scale 0.0 0.9 saw))
+
+bpm 160
+
+m1 $ slow 4 $ slowcat [note "[70]", note "[71 ~ 80]", note "[54 48 47 ~ 63 ~]"]
+
+--2018 mix
+m1 $ sometimes (|-| note "-3 +3 -5 +5") $ slow 4 $ note "[[30] [31 ~ 40] [54 48 47 ~ 63 ~]]"
+
+d1 $ every 4 (jux (#nudge "0.05")) $ rarely (degradeBy 0.5) $ every 2 (|+| speed "{1 0.8 0.7 2 3 0.4}%24") 
+   $ stack [
+    s "[battles(3,8)" # cut "3",
+    s "[bit1(2,6)]" 
+   ]
+   # n (irand 20)
+   |+| (slow 4 $ gain (scale 0.4 0.8 sinewave1))
+   # slowcat [pEven, pOdd]
+   --# gain "0.9"
+
+d2 $ slow 4 $ rarely (degradeBy 0.6)
+   $ sometimes (spin 2) 
+   $ every 2 (jux (iter 2))
+   $ sound (samples "armora*12?" (irand 4)) 
+   |+| (slow 3 $ gain (scale 0.5 0.9 sinewave1))
+   # (density 8 $ randcat [l1,l2,l3,l4,l5,l6,l7,l8])
+
+--gXc
+d2 $ slow 4 $ rarely (degradeBy 0.6) 
+   $ sometimes (spin 2) 
+   $ every 2 (jux (iter 2) . jux (#nudge "0.05")) 
+   $ sound (samples "armora*24?" (irand 9)) 
+   # cut "1"
+   # (density 8 $ randcat [pair1c, pair2c])
+
+d3 $ sometimes (degradeBy 0.6) 
+   $ sometimes (jux (spin 4)) 
+   $ sometimes (|+| speed "[0.5,0.4]")
+   $ sound (samples "[e*8?]" (irand 15))
+   |+| (slow 2 $ gain (scale 0.7 1.0 sinewave1))
+   # (density 8 $ randcat [l1,l2,l3,l4,l5,l6,l7,l8])
+
+d4 $ degradeBy 0.4 $ 
+   slow 3 $ 
+   every 3 (jux (#nudge "0.05") . (|+| speed "[0.5,2]")) $
+   sound (samples "[fall2*8?]" (irand 15))
+   |+| crush "3"
+   |+| gain "0.8"
+   # speed "{0.8 0.7 0.5 0.4 1.2 1.0}%8"
+   # cut "3"
+   # (density 8 $ randcat [l1,l2,l3,l4,l5,l6,l7,l8])
+
+--ftwrk it
+d5 $ slow 4 $ sound (samples "[xxlbd(3,8)]" (run 4))
+   # pair1
+
+d6 $ slow 4 $ every 4 (density 2 . rev) $ every 6 (0.25 ~>) $ 
+   sound (samples "[99p*3?, 808rs*8?]" (run 4))
+   # slowcat [pEven, pOdd]
+
+--2018 mix
+m1 $ sometimes (|-| note "-3 +3 -5 +5") $ slow 4 $ note "[[30] [31 ~ 40] [54 48 47 ~ 63 ~]]"
+   # nudge "-0.9"
+
+m1 silence
